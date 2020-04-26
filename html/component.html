@@ -4,37 +4,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>组件基础（主要参考官网示例）</title>
     <script type="text/javascript" src="/static/js/vue.js"></script>
 </head>
 
 <body>
     <div id="body-demo">
+        <!-- hello示例，包括data及template -->
         <line-demo title="hello示例，包括data及template"></line-demo>
         <div id="hello-demo">
-            <button-component></button-component>
-        </div>
-        
-        <line-demo title="props使用"></line-demo>
-        <div id="props-demo">
-            <blog-post title="微博头条"></blog-post>
+            <hello-component></hello-component>
         </div>
 
+        <!-- props使用 向组件传参数 -->
+        <line-demo title="props使用"></line-demo>
+        <div id="props-demo">
+            <props-component title="微博头条"></props-component>
+        </div>
+
+        <!-- 获取省份列表 -->
+        <line-demo title="获取省份列表"></line-demo>
+        <select id="props-json-demo">
+            <props-json-component v-for="province in provinces" v-bind:id="province.provinceId"
+                v-bind:provinceName="province.provinceName">
+            </props-json-component>
+        </select>
+
+        <!-- 监听子组件事件 -->
+        <line-demo title="监听子组件事件"></line-demo>
+        <div id="event-demo">
+            <div v-bind:style="{fontSize: postFontSize + 'em'}">
+                <!-- {{ title }} -->
+                <event-component v-bind:title="title" v-on:large-text="postFontSize += 0.1"
+                    v-on:small-text="postFontSize -= 0.1"></event-component>
+            </div>
+        </div>
     </div>
+
+
     <script type="text/javascript">
         //#region 分割綫
         Vue.component("line-demo", {
             props: ['title'],
-            template: '<div><hr style="border:5 dashed" align="left" width="50%" color=#987cb9 size=3/><br /><h3>{{ title }}</h3></div>'
+            template: '<div><hr style="border:5 dashed" align="left" width="50%" color=#987cb9 size=3/><h3>{{ title }}</h3></div>'
         })
 
-        new Vue({
-            el: "#body-demo"
-        })
+        // new Vue({
+        //     el: "#body-demo"
+        // })
         //#endregion
 
         //#region hello-demo
-        Vue.component("button-component", {
+        Vue.component("hello-component", {
             data() {
                 return {
                     count: 0
@@ -43,20 +64,98 @@
             template: "<button v-on:click='count++'>点击了{{ count }}次</button>"
         })
 
-        new Vue({
-            el: "#hello-demo"
-        })
+        // new Vue({
+        //     el: "#hello-demo"
+        // })
         //#endregion
 
         //#region props-demo
-        Vue.component("blog-post", {
+        Vue.component("props-component", {
             props: ["title"],
             template: "<h3>{{ title }}</h3>"
         })
-        new Vue({
-            el: "#props-demo"
+        // new Vue({
+        //     el: "#props-demo"
+        // })
+        //#endregion    
+
+        //#region props-json-demo
+        Vue.component("props-json-component", {
+            props: ["provinceName"],
+            template: "<option value='provinceName'>{{ provinceName }}</option>"
         })
+
+        // new Vue({
+        //     el: "#props-json-demo",
+        //     data: {
+        //         provinces: []
+        //     },
+        //     'de-created': function() {
+        //         var vm = this;
+
+        //         // 请求省份列表接口
+        //         fetch("http://test.xxt.cn/api/base/region/getprovinces")
+        //         .then(function(response) {
+        //             return response.json();
+        //         })
+        //         .then(function(datas) {
+        //             console.log(datas);
+        //             vm.provinces = datas;
+        //         })
+        //     }
+        // })
         //#endregion
+
+        //#region event-demo
+        Vue.component("event-component", {
+            props: ['title'],
+            template: `
+            <div>
+                <h3>{{ title }}</h3>
+                <button v-on:click="$emit('large-text')">+</button>
+                <button v-on:click="$emit('small-text')">-</button>
+            </div>
+            `
+        })
+
+        //#endregion
+
+        // 由于以上都是全局注册组件，使用一个高层级的元素创建Vue实例
+        new Vue({
+            el: "#body-demo",
+            data: {
+                title: "点击调整字体",
+                postFontSize: 1,
+                provinces: []
+            }, 
+            created: function() {
+                var vm = this;
+
+                // 请求省份列表接口
+                fetch("http://rest.xxt.cn/base/region/getprovinces", {
+                    method: 'GET',
+                    mode: 'cors'
+                })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(datas) {
+                    console.log(datas);
+                    vm.provinces = datas;
+                })
+            }
+        })
+
+        // 测试多个实例，不同el标签，组件的绑定顺序
+        // 结论： 会根据vue实例初始化的先后顺序进行绑定。
+        // 多个实例会导致监听事件出错。暂不明白原因
+        // new Vue({
+        //     // el: "#event-demo",
+        //     // data: {
+        //     //     title: "测试监听事件",
+        //     //     postFontSize: 1
+        //     // }
+        // })
     </script>
 </body>
 

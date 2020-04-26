@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="/static/js/vue.js"></script>
+    <title>组件基础（主要参考60分钟学习示例）</title>
+</head>
+
+<body>
+    <line-component titile="简单示例"></line-component>
+    <!-- div区域 -->
+    <div id="app">
+
+        <!-- <parent-component title="点击抽奖（剩余次数1次）" v-bind:display="true">
+        </parent-component> -->
+        <child-component v-bind:display="display"></child-component>
+
+        <slot-component title="JAVA IN Action">
+            <template v-slot:author>乔治</template>
+        </slot-component>
+    </div>
+
+    <!-- template区域 -->
+    <!-- 使用template标签代替组件中template -->
+    <template id="line-template">
+        <div>
+            <hr style="border:5 dashed" align="left" width="50%" color=#987cb9 size=3 />
+            <h3>{{ title }}</h3>
+        </div>
+    </template>
+
+    <template id="parentTemplate">
+        <div>
+            <div v-if="display">
+                <h2>{{ title }}</h2>
+            </div>
+        </div>
+    </template>
+
+    <template id="childTemplate">
+        <div>
+            <div v-if="!display">
+                <h2>今天抽奖已结束，请明天再来</h2>
+            </div>
+            <button v-else v-on:click="hello">Click</button>
+        </div>
+    </template>
+
+    <template id="slot-template">
+        <div>
+            <h2>{{ title }}</h2>
+            <slot name="author">佚名</slot>
+        </div>
+    </template>
+
+    <!-- script区域 -->
+    <script type="text/javascript">
+        //#region 分割綫
+        Vue.component("line-demo", {
+            props: ['title'],
+            template: "#lineTemplate"
+        })
+        //#endregion
+
+        //#region 简单示例
+        new Vue({
+            el: "#app",
+            data: {
+                title: "点击开始抽奖",
+                display: true
+            },
+            // 局部注册，免创造器语法糖
+            components: {
+                "parent-component": {
+                    template: "#parentTemplate",
+                    props: {
+                        title: String,
+                        display: Boolean
+                    }
+                },
+                "child-component": {
+                    template: "#childTemplate",
+                    props: {
+                        display: Boolean
+                    },
+                    data() {
+                        return {
+                            msg: "一等奖",
+                        }
+                    },
+                    methods: {
+                        hello: function () {
+                            alert(this.msg);
+                            // this.display = false;
+                            this.$parent.display = false;
+                        }
+                    }
+                },
+                "slot-component": {
+                    template: "#slot-template",
+                    props: {
+                        title: String,
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
