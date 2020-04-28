@@ -5,6 +5,7 @@
       <router-link to="/">Home</router-link>|
       <router-link to="/about">About</router-link>|
       <router-link to="/user/route">route</router-link>|
+      <router-link to="/vuex"></router-link>
     </div>
     <router-view />
   </div>

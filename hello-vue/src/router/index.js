@@ -33,6 +33,10 @@ const routes = [
         component: () => import('@/views/dynamic-route/Path.vue')
       }
     ]
+  },
+  {
+    path: '/vuex',
+    component: () => import('@/views/vuex-demo/VuexDemo.vue')
   }
 ]
 
