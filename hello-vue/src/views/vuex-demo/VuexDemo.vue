@@ -12,28 +12,28 @@
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       count: 0
     }
   },
   methods: {
-    add () {
+    add() {
       // 调用sotre的行为
       this.$store.commit('increment')
       // console.log(this.$store.state.count)
       // this.count = this.$store.state.count
     },
-    unadd: function () {
+    unadd: function() {
       // 提交改变行为
       this.$store.commit('decrease')
     },
-    'viewState' () {
+    'viewState'() {
       this.$router.push('/user/count/relative')
     }
   },
   computed: {
-    count2 () {
+    count2() {
       return this.$store.state.count
     }
   }

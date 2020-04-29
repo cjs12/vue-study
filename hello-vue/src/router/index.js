@@ -37,6 +37,18 @@ const routes = [
   {
     path: '/vuex',
     component: () => import('@/views/vuex-demo/VuexDemo.vue')
+  },
+  {
+    path: '/components/markdown',
+    component: () => import('@/views/markdown/Markdown.vue')
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/error-page/404.vue')
+  },
+  {
+    path: '*',
+    redirect: '/404'
   }
 ]
 
