@@ -3,7 +3,7 @@
     <h2> 动态路由</h2>
     <router-link to="/user/xiaoming">小明</router-link>|
     <router-link to="/user/xiaohong">小红</router-link>|
-    <br/>
+    <br>
     <div>Hello, {{ this.$route.params.name }}</div>
 
     <h2> 嵌套路由</h2>

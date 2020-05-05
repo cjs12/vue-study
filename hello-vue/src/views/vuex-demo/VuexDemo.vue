@@ -5,9 +5,9 @@
     <br>
     <label>通过计算属性展示</label>
     {{ count2 }}
-    <button v-on:click="add">+</button>
-    <button v-on:click="unadd">-</button>
-    <div v-on:click="viewState">查看其他组件</div>
+    <button @click="add">+</button>
+    <button @click="unadd">-</button>
+    <div @click="viewState">查看其他组件</div>
   </div>
 </template>
 <script>
@@ -15,6 +15,11 @@ export default {
   data() {
     return {
       count: 0
+    }
+  },
+  computed: {
+    count2() {
+      return this.$store.state.count
     }
   },
   methods: {
@@ -30,11 +35,6 @@ export default {
     },
     'viewState'() {
       this.$router.push('/user/count/relative')
-    }
-  },
-  computed: {
-    count2() {
-      return this.$store.state.count
     }
   }
 }

@@ -11,7 +11,49 @@ Vue.use(VueRouter)
 
 // 定义路由
 // 每个路由配置一个组件
+// 配置vant相关路由
+
+const axiosRoute = {
+  path: '/axios',
+  component: () => import('../views/layout/index.vue'),
+  children: [
+    {
+      path: 'hello',
+      component: () => import('../views/axios/hello-axios.vue')
+    }
+  ]
+}
+
+const vantRoute = {
+  path: '/vant',
+  component: () => import('../views/layout/index.vue'),
+  name: 'vant',
+  children: [
+    {
+      path: 'button',
+      component: () => import('../views/vant/Button.vue')
+    }
+  ]
+}
+
+const elementRoute = {
+  path: '/element',
+  redirect: '/element/button',
+  name: 'element',
+  component: () => import('../views/layout/index.vue'),
+  children: [
+    {
+      path: 'button',
+      name: 'button',
+      component: () => import('../views/element/Button.vue')
+    }
+  ]
+}
+
 const routes = [
+  axiosRoute,
+  vantRoute,
+  elementRoute,
   {
     path: '/',
     name: '主页',
@@ -39,8 +81,12 @@ const routes = [
     component: () => import('@/views/vuex-demo/VuexDemo.vue')
   },
   {
-    path: '/components/markdown',
-    component: () => import('@/views/markdown/Markdown.vue')
+    path: '/components/quill',
+    component: () => import('@/views/editor/quill.vue')
+  },
+  {
+    path: '/components/record',
+    component: () => import('@/views/editor/RecordList.vue')
   },
   {
     path: '/404',
